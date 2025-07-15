@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <style>
+    :root {
+      --primary-color: #0077b6;
+      --card-bg: #f1f1f1;
+      --text-dark: #222;
+      --text-light: #555;
+      --radius: 1.2rem;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ade8f4, #caf0f8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    main {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      width: 90vw;
+      max-width: 32rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    input {
+      padding: 0.8rem;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.8rem;
+      font-size: 1rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #023e8a;
+    }
+
+    section.card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      box-shadow: 0 0.6rem 1.6rem rgba(0, 0, 0, 0.1);
+    }
+
+    .temp {
+      font-size: 2.4rem;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .description {
+      text-transform: capitalize;
+      font-size: 1.2rem;
+      color: var(--text-light);
+      margin: 0.4rem 0;
+    }
+
+    .info {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1.2rem;
+      font-size: 1rem;
+      color: var(--text-dark);
+    }
+
+    img.weather-icon {
+      width: 5rem;
+      height: 5rem;
+    }
+
+    footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Weather App</h1>
+    <form id="weatherForm">
+      <input type="text" id="cityInput" placeholder="Enter city name" required />
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <section class="card" id="weatherCard" style="display: none;">
+      <img src="" alt="Weather Icon" class="weather-icon" id="weatherIcon" />
+      <div class="temp" id="temperature"></div>
+      <div class="description" id="description"></div>
+      <div class="info">
+        <span id="humidity"></span>
+        <span id="wind"></span>
+      </div>
+    </section>
+
+    <footer>
+      Powered by OpenWeatherMap API
+    </footer>
+  </main>
+
+  <script>
+    const apiKey = "05b100a12654fa32ca2956c0d7313b9c"; // 🔁 Replace with your OpenWeatherMap API key
+    const form = document.getElementById('weatherForm');
+    const cityInput = document.getElementById('cityInput');
+    const card = document.getElementById('weatherCard');
+    const temperature = document.getElementById('temperature');
+    const description = document.getElementById('description');
+    const humidity = document.getElementById('humidity');
+    const wind = document.getElementById('wind');
+    const weatherIcon = document.getElementById('weatherIcon');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const city = cityInput.value.trim();
+      if (city) {
+        fetchWeather(city);
+      }
+    });
+
+    function fetchWeather(city) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("City not found");
+          }
+          return response.json();
+        })
+        .then(data => {
+          card.style.display = 'block';
+          temperature.textContent = `${data.main.temp}°C`;
+          description.textContent = data.weather[0].description;
+          humidity.textContent = `Humidity: ${data.main.humidity}%`;
+          wind.textContent = `Wind: ${data.wind.speed} m/s`;
+          const iconCode = data.weather[0].icon;
+          weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+          weatherIcon.alt = data.weather[0].description;
+        })
+        .catch(error => {
+          alert(error.message);
+          card.style.display = 'none';
+        });
+    }
+  </script>
+</body>
+</html>
