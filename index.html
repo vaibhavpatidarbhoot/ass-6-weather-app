@@ -48,28 +48,27 @@
     }
 
     .preset-cities {
-  display: flex;
-  justify-content: center;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-}
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
 
-.preset-cities button {
-  background-color: transparent;
-  color: var(--primary-color);
-  border: 0.1rem solid var(--primary-color);
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius);
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+    .preset-cities button {
+      background-color: transparent;
+      color: var(--primary-color);
+      border: 0.1rem solid var(--primary-color);
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-.preset-cities button:hover {
-  background-color: var(--primary-color);
-  color: #fff;
-}
-
+    .preset-cities button:hover {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
 
     input {
       padding: 0.8rem;
@@ -139,13 +138,14 @@
     <form id="weatherForm">
       <input type="text" id="cityInput" placeholder="Enter city name" required />
       
-<div class="preset-cities">
-  <button type="button" onclick="fetchWeather('Indore')">Indore</button>
-  <button type="button" onclick="fetchWeather('Mumbai')">Mumbai</button>
-  <button type="button" onclick="fetchWeather('Hyderabad')">Hyderabad</button>
-</div>
+      <div class="preset-cities">
+        <button type="button" onclick="fetchWeather('Indore')">Indore</button>
+        <button type="button" onclick="fetchWeather('Mumbai')">Mumbai</button>
+        <button type="button" onclick="fetchWeather('Hyderabad')">Hyderabad</button>
+      </div>
 
       <button type="submit">Get Weather</button>
+      <button type="button" onclick="refreshWeather()">Refresh</button>
     </form>
 
     <section class="card" id="weatherCard" style="display: none;">
@@ -164,7 +164,9 @@
   </main>
 
   <script>
-    const apiKey = "05b100a12654fa32ca2956c0d7313b9c"; // 🔁 Replace with your OpenWeatherMap API key
+    const apiKey = "05b100a12654fa32ca2956c0d7313b9c"; // Replace with your actual key
+    let lastCity = "";
+
     const form = document.getElementById('weatherForm');
     const cityInput = document.getElementById('cityInput');
     const card = document.getElementById('weatherCard');
@@ -183,6 +185,7 @@
     });
 
     function fetchWeather(city) {
+      lastCity = city;
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
       fetch(url)
@@ -206,6 +209,14 @@
           alert(error.message);
           card.style.display = 'none';
         });
+    }
+
+    function refreshWeather() {
+      if (lastCity) {
+        fetchWeather(lastCity);
+      } else {
+        alert("Please search a city first.");
+      }
     }
   </script>
 </body>
