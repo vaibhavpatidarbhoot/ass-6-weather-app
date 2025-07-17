@@ -145,7 +145,7 @@
       </div>
 
       <button type="submit">Get Weather</button>
-      <button type="button" onclick="refreshWeather()">Refresh</button>
+      <button type="button" onclick="location.reload()">Refresh</button>
     </form>
 
     <section class="card" id="weatherCard" style="display: none;">
@@ -189,12 +189,6 @@
       currentCity = city;
       cityInput.value = city;
       fetchWeather(city);
-    }
-
-    function refreshWeather() {
-      if (currentCity) {
-        fetchWeather(currentCity);
-      }
     }
 
     function fetchWeather(city) {
