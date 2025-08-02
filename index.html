@@ -1,126 +1,95 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Weather App - Indore</title>
-
-  <!-- Google Fonts and Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro&display=swap">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  
+  <title>Weather App</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      background: #343434;
-      font-family: 'Crimson Pro', serif;
-      color: #f1f1f1;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 360px;
-      padding: 1rem;
-    }
-
-    .card {
-      border-radius: 2rem;
-      background: #343434;
-      box-shadow: 5px 5px 15px #191b1b, -5px -5px 15px #595959;
-      text-align: center;
       padding: 2rem;
     }
 
-    .card h2 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
+    #weather-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      max-width: 300px;
+      width: 100%;
+      text-align: center;
     }
 
-    .card h6 {
-      text-transform: capitalize;
-      font-size: 1.2rem;
-      color: #ccc;
-    }
-
-    .card h4 {
-      font-size: 3rem;
-      margin: 1rem 0;
-    }
-
-    #icon {
-      display: block;
-      width: 100px;
-      margin: 0 auto;
-    }
-
-    .refresh {
-      background: none;
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
+      color: white;
       border: none;
-      margin-top: 1.5rem;
-      font-size: 2.5rem;
-      color: #f1f1f1;
-      border-radius: 50%;
-      width: 80px;
-      height: 80px;
-      box-shadow: 5px 5px 15px #252525, -5px -5px 15px #4a4a4a;
-      transition: box-shadow 0.2s ease-in-out;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
-    .refresh:hover {
-      box-shadow: inset 5px 5px 10px #252525, inset -5px -5px 10px #4a4a4a;
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #error-msg {
+      color: red;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="card">
-      <h2><i class="material-icons">room</i> <span id="location">Loading...</span></h2>
-      <h6 id="weather">---</h6>
-      <h4><span id="temp">--</span><sup>°C</sup></h4>
-      <img id="icon" src="" alt="Weather Icon">
-      <button class="refresh" onclick="getWeather()">
-        <i class="material-icons">autorenew</i>
-      </button>
-    </div>
+  <div id="weather-box">
+    <h2>Current Weather</h2>
+    <div id="weather-data">Loading...</div>
+    <button onclick="fetchWeather()">Refresh Weather</button>
+    <div id="error-msg"></div>
   </div>
 
   <script>
-    const apiKey = "e684118e4a2628b84639a4c06a75d529";
-    const cityId = "1269743"; // Indore
+    const API_KEY = 'e684118e4a2628b84639a4c06a75d52'; // Replace with your OpenWeatherMap API key
+    const city = 'Indore'; // You can make this dynamic if needed
 
-    async function getWeather() {
-      const url = `https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=${apiKey}&units=metric`;
+    function fetchWeather() {
+      const weatherData = document.getElementById("weather-data");
+      const errorMsg = document.getElementById("error-msg");
 
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Weather data not found.");
-
-        const data = await response.json();
-
-        document.getElementById("location").textContent = data.name;
-        document.getElementById("weather").textContent = data.weather[0].description;
-        document.getElementById("temp").textContent = Math.round(data.main.temp);
-        document.getElementById("icon").src = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`;
-        document.getElementById("icon").alt = data.weather[0].description;
-      } catch (error) {
-        alert("Error fetching weather data: " + error.message);
-        document.getElementById("location").textContent = "Unavailable";
-      }
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Weather data not found");
+          }
+          return response.json();
+        })
+        .then(data => {
+          weatherData.innerHTML = `
+            <strong>${data.name}</strong><br>
+            ${data.weather[0].main} - ${data.weather[0].description}<br>
+            🌡️ ${data.main.temp}°C (feels like ${data.main.feels_like}°C)<br>
+            💧 Humidity: ${data.main.humidity}%
+          `;
+          errorMsg.textContent = '';
+        })
+        .catch(error => {
+          errorMsg.textContent = error.message;
+          weatherData.innerHTML = '';
+        });
     }
 
-    // Load on page start
-    window.onload = getWeather;
+    // Load weather data on page load (without full page reload)
+    document.addEventListener("DOMContentLoaded", fetchWeather);
   </script>
+
 </body>
 </html>
+
+
+
