@@ -1,264 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <style>
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f8ff;
-    min-height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-main {
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.weather-card {
-    background: linear-gradient(135deg, #6dd5ed, #2193b0);
-    border-radius: 1.5rem;
-    padding: 2.5rem 2rem;
-    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.1);
-    text-align: center;
-    color: #fff;
-    max-width: 28rem;
-    width: 90vw;
-    transition: transform 0.3s;
-    margin: 2rem auto;
-}
-
-.weather-card:hover {
-    transform: scale(1.03);
-}
-
-.city-name {
-    font-size: 2.2rem;
-    margin-bottom: 1.2rem;
-}
-
-.weather-info {
-    margin: 1.2rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.weather-icon-container {
-    margin-bottom: 1rem;
-}
-
-#weather-icon {
-    width: 6rem;
-    height: 6rem;
-}
-
-.weather-description {
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
-    text-transform: capitalize;
-}
-
-.temp-container {
-    margin-bottom: 1.2rem;
-}
-
-.temperature {
-    font-size: 3.2rem;
-    margin: 0.5rem 0;
-}
-
-.feels-like {
-    font-size: 1.2rem;
-    margin: 0.2rem 0;
-}
-
-.weather-details {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin: 1.2rem 0;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 1.1rem;
-}
-
-.last-updated {
-    margin: 1rem 0 0.5rem 0;
-    font-size: 0.9rem;
-    color: #e0f7fa;
-}
-
-button {
-    background-color: #ff6f61;
-    border: none;
-    border-radius: 0.5rem;
-    color: #fff;
-    padding: 0.7em 1.5em;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 0.5rem 0.5rem 0 0.5rem;
-}
-
-button:hover {
-    background-color: #ff4c3b;
-}
-
-.search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-#city-input {
-    padding: 0.6em 1em;
-    border-radius: 0.5rem;
-    border: none;
-    font-size: 1.1rem;
-    width: 12rem;
-    max-width: 60vw;
-}
-
-.loading {
-    display: none;
-    position: absolute;
-    top: 2rem;
-    left: 50vw;
-    transform: translateX(-50%);
-    background: #2193b0;
-    color: #fff;
-    padding: 1em 2em;
-    border-radius: 1em;
-    font-size: 1.2rem;
-    z-index: 10;
-}
-
-@media (max-width: 40em) {
-    .weather-card {
-        padding: 1.2rem 0.5rem;
-        max-width: 98vw;
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather App | Vaibhav Bhoot</title>
+  <style>
+    :root {
+      --primary: #2d6cdf;
+      --bg: #f7f9fc;
+      --white: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
     }
-    .weather-details {
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+
+    .card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .city-name {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--muted);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      outline: none;
+      min-width: 60%;
+    }
+
+    button {
+      padding: 0.6rem 1rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    button:hover {
+      background-color: #1e4db6;
+    }
+
+    .weather-icon {
+      width: 80px;
+      height: 80px;
+      margin: 1rem auto;
+      display: none;
+    }
+
+    .temperature {
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .description {
+      text-transform: capitalize;
+      color: var(--muted);
+      font-size: 1rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .details {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .loading {
+      display: none;
+      font-size: 0.95rem;
+      text-align: center;
+      color: var(--muted);
+      margin-top: 1rem;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 500px) {
+      .input-group {
         flex-direction: column;
-        gap: 1rem;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      input[type="text"] {
+        width: 100%;
+      }
     }
-    #weather-icon {
-        width: 4.5rem;
-        height: 4.5rem;
-    }
-}
-      
-    </style>
+  </style>
 </head>
 <body>
-    <main>
-        <div class="loading" id="loading">Loading weather data...</div>
-        <section class="weather-card" aria-live="polite">
-            <div class="search-container">
-                <input type="text" id="city-input" placeholder="Enter city name">
-                <button id="search-button">🔍 Search</button>
-            </div>
-            <h1 class="city-name">Weather in <span id="city">City</span></h1>
-            <article class="weather-info">
-                <figure class="weather-icon-container">
-                    <img id="weather-icon" src="" alt="Current weather condition" loading="lazy" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/212f32db-812f-4de6-b107-6f6e754ce609.png">
-                    <figcaption id="weather-description" class="weather-description">Loading weather data...</figcaption>
-                </figure>
-                <div class="temp-container">
-                    <p class="temperature" id="temperature">-- °C</p>
-                    <p class="feels-like" id="feels-like">Feels like: -- °C</p>
-                </div>
-                <div class="weather-details">
-                    <div class="detail-item">
-                        <span>💧</span>
-                        <p id="humidity">--%</p>
-                    </div>
-                    <div class="detail-item">
-                        <span>🌬️</span>
-                        <p id="wind-speed">-- m/s</p>
-                    </div>
-                    <div class="detail-item">
-                        <span>🌡️</span>
-                        <p id="pressure">-- hPa</p>
-                    </div>
-                </div>
-            </article>
-            <div class="last-updated">
-                <small id="last-updated">Last updated: --</small>
-            </div>
-            <button id="refresh-button">🔄 Refresh</button>
-        </section>
-    </main>
-    <script>
+  <div class="card">
+    <h2>🌤️ Weather App</h2>
+    <div class="city-name" id="city-name">City: --</div>
 
-      const apiKey = '6dbf2b63d44f347b71488c2996fba580';
-const city = 'Indore'; 
+    <div class="input-group">
+      <input type="text" id="city-input" placeholder="Enter city name"/>
+      <button id="search-button">Search</button>
+      <button id="refresh-button">↻</button>
+    </div>
 
-const cityInput = document.getElementById('city-input');
-const searchButton = document.getElementById('search-button');
-const loadingDiv = document.getElementById('loading');
+    <img src="" id="weather-icon" class="weather-icon" alt="Weather icon"/>
 
-function setLoading(isLoading) {
-    loadingDiv.style.display = isLoading ? 'block' : 'none';
-}
+    <div class="temperature" id="temperature">-- °C</div>
+    <div class="description" id="description">--</div>
 
-function updateWeatherCard(data) {
-    document.getElementById('city').textContent = data.name;
-    document.getElementById('temperature').textContent = `${Math.round(data.main.temp)} °C`;
-    document.getElementById('feels-like').textContent = `Feels like: ${Math.round(data.main.feels_like)} °C`;
-    document.getElementById('humidity').textContent = `Humidity: ${data.main.humidity}%`;
-    document.getElementById('wind-speed').textContent = `Wind Speed: ${data.wind.speed} m/s`;
-    document.getElementById('pressure').textContent = `${data.main.pressure} hPa`;
-    document.getElementById('weather-icon').src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-    document.getElementById('weather-description').textContent = data.weather[0].description;
-    document.getElementById('last-updated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
-}
+    <div class="details">
+      💧 Humidity: <span id="humidity">--%</span><br/>
+      🌬️ Wind: <span id="wind">-- m/s</span><br/>
+      🌡️ Pressure: <span id="pressure">-- hPa</span><br/>
+      ⏱️ Last updated: <span id="last-updated">--</span>
+    </div>
 
-function fetchWeatherData(cityName = city) {
-    setLoading(true);
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${apiKey}`;
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            updateWeatherCard(data);
-            setLoading(false);
+    <div class="loading" id="loading">Fetching weather data...</div>
+
+    <div class="footer">Made by Vaibhav Bhoot</div>
+  </div>
+
+  <script>
+    const apiKey = '6dbf2b63d44f347b71488c2996fba580';
+    let currentCity = 'Indore';
+
+    const cityInput = document.getElementById('city-input');
+    const searchBtn = document.getElementById('search-button');
+    const refreshBtn = document.getElementById('refresh-button');
+    const loadingDiv = document.getElementById('loading');
+    const weatherIcon = document.getElementById('weather-icon');
+
+    const elements = {
+      city: document.getElementById('city-name'),
+      icon: weatherIcon,
+      temp: document.getElementById('temperature'),
+      desc: document.getElementById('description'),
+      humidity: document.getElementById('humidity'),
+      wind: document.getElementById('wind'),
+      pressure: document.getElementById('pressure'),
+      updated: document.getElementById('last-updated')
+    };
+
+    function setLoading(show) {
+      loadingDiv.style.display = show ? 'block' : 'none';
+    }
+
+    function updateWeather(data) {
+      elements.city.textContent = `City: ${data.name}`;
+      elements.temp.textContent = `${Math.round(data.main.temp)} °C`;
+      elements.desc.textContent = data.weather[0].description;
+      elements.humidity.textContent = `${data.main.humidity}%`;
+      elements.wind.textContent = `${data.wind.speed} m/s`;
+      elements.pressure.textContent = `${data.main.pressure} hPa`;
+      elements.updated.textContent = new Date().toLocaleTimeString();
+
+      // Show icon
+      weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+      weatherIcon.style.display = 'block';
+    }
+
+    function fetchWeather(cityName) {
+      setLoading(true);
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${apiKey}`)
+        .then(res => {
+          if (!res.ok) throw new Error('City not found');
+          return res.json();
         })
-        .catch(error => {
-            setLoading(false);
-            alert('Error fetching weather data. Please try again.');
-            console.error('Error fetching weather data:', error);
-        });
-}
+        .then(data => {
+          currentCity = cityName;
+          updateWeather(data);
+        })
+        .catch(err => {
+          alert(err.message);
+        })
+        .finally(() => setLoading(false));
+    }
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchWeatherData();
-
-    document.getElementById('refresh-button').addEventListener('click', () => {
-        alert('Refreshing weather data...');
-        location.reload();
+    // Load default city
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchWeather(currentCity);
     });
 
-    searchButton.addEventListener('click', () => {
-        const cityName = cityInput.value.trim();
-        if (cityName) fetchWeatherData(cityName);
+    // Search city
+    searchBtn.addEventListener('click', () => {
+      const city = cityInput.value.trim();
+      if (city) {
+        fetchWeather(city);
+        cityInput.value = '';
+      }
     });
-});
-    </script>
+
+    // Refresh current city
+    refreshBtn.addEventListener('click', () => {
+      fetchWeather(currentCity);
+    });
+  </script>
 </body>
 </html>
